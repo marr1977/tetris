@@ -1,0 +1,119 @@
+#include "TetrisBoardDrawer.h"
+
+#include <iostream>
+
+namespace Tetris
+{
+
+    TetrisBoardDrawer::TetrisBoardDrawer(TetrisBoard& _board, sf::RenderWindow& _window) : board(_board), window(_window)
+    {
+        if (!font.loadFromFile("arial.ttf"))
+            std::cerr << "Error loading font" << std::endl;
+    }
+
+    void TetrisBoardDrawer::Draw()
+    {
+        float boxSize = 25;
+
+        float width = boxSize * board.GetWidth();
+        float height = boxSize * board.GetHeight();
+
+        float startX = (window.getSize().x - width) / 2;
+        float startY = (window.getSize().y - height) / 2;
+
+        float lineSize = 1.0f;
+
+        sf::Color gridColor(128, 128, 128);
+
+        sf::Text scoreText;
+        scoreText.setFont(font);
+        scoreText.setString(std::string("Score: ") + std::to_string(board.GetScore()));
+        scoreText.setPosition(5, 5);
+        scoreText.setCharacterSize(24);
+        scoreText.setFillColor(gridColor);
+        window.draw(scoreText);
+
+        sf::Text levelText;
+        levelText.setFont(font);
+        levelText.setString(std::string("Level: ") + std::to_string(board.GetLevel()));
+        levelText.setPosition(scoreText.getPosition().x, scoreText.getPosition().y + scoreText.getCharacterSize() + 5);
+        levelText.setCharacterSize(24);
+        levelText.setFillColor(gridColor);
+        window.draw(levelText);
+
+        if (!board.IsActive())
+        {
+            sf::Text text;
+            text.setFont(font);
+            text.setString("Press enter to start");
+            text.setPosition(190, 55);
+            text.setCharacterSize(24);
+            text.setFillColor(sf::Color::Yellow);
+            window.draw(text);
+
+            if (board.IsGameOver())
+            {
+                sf::Text text;
+                text.setFont(font);
+                text.setString("Game over! Good job!");
+                text.setPosition(180, 100);
+                text.setCharacterSize(24);
+                text.setFillColor(sf::Color::Red);
+                window.draw(text);
+            }
+        }
+
+        if (board.GetMovingTetromino())
+        {
+            std::set<Point> points;
+            board.GetMovingTetromino()->GetPoints(points);
+
+            for (const Point& pt : points)
+            {
+                if (pt.y < 0) {
+                    continue;
+                }
+                float topX = startX + pt.x * boxSize;
+                float topY = startY + pt.y * boxSize;
+    
+                sf::RectangleShape box({boxSize, boxSize});
+                box.setFillColor(board.GetMovingTetromino()->GetColor());
+                box.setPosition(topX, topY);
+                window.draw(box);
+            }
+
+        }
+
+        for (const auto& pair : board.GetPoints())
+        {
+            if (pair.first.y < 0) {
+                continue;
+            }
+            float topX = startX + pair.first.x * boxSize;
+            float topY = startY + pair.first.y * boxSize;
+
+            sf::RectangleShape box({boxSize, boxSize});
+            box.setFillColor(pair.second);
+            box.setPosition(topX, topY);
+            window.draw(box);
+        }
+
+         // Draw vertical lines
+        for (int i = 0; i <= board.GetWidth(); i++)
+        {
+            sf::RectangleShape line({lineSize, height});
+            line.setFillColor(gridColor);
+            line.setPosition(startX + i * boxSize, startY);
+            window.draw(line);
+        }
+
+        // Draw horizontal lines
+        for (int i = 0; i <= board.GetHeight(); i++)
+        {
+            sf::RectangleShape line({width, lineSize});
+            line.setFillColor(gridColor);
+            line.setPosition(startX, startY + i * boxSize);
+            window.draw(line);
+        }
+    }
+}
