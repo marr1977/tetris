@@ -8,6 +8,7 @@
 int main()
 {
     sf::RenderWindow window(sf::VideoMode(600, 800), "Tetris");
+    window.setFramerateLimit(60); // Lowers cpu usage drastically
 
     Tetris::TetrisBoard board;
     Tetris::TetrisBoardDrawer boardDrawer(board, window);

@@ -257,7 +257,6 @@ namespace Tetris
             movingTetramino = std::move(nextTetramino);
         }
 
-        std::cout << "Generated" << std::endl;       
         nextTetramino = std::unique_ptr<Tetromino>(GetRandomTetramino());
     }
 
