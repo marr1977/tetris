@@ -4,11 +4,9 @@
 namespace Tetris
 {
 
-
-    
-    TetrisBoard::TetrisBoard() : gen(rd()), distrib(1,7)
+    TetrisBoard::TetrisBoard(const std::string& _playerName, const std::string& highScoreFile) : 
+        gen(rd()), distrib(1,7), highScores("/home/martin/highscores.txt", 10), playerName(_playerName)
     {
-
     }
 
     void TetrisBoard::Start()
@@ -23,7 +21,6 @@ namespace Tetris
         level = 1;
         totalLinesRemoved = 0;
         stationaryPoints.clear();
-        std::cout << "Start" << std::endl;
     }
 
     void TetrisBoard::Tick()
@@ -148,8 +145,6 @@ namespace Tetris
 
     void TetrisBoard::RemoveFilledLines()
     {
-        std::cout << std::endl;
-
         int linesRemoved = 0;
         while (true)
         {
@@ -176,8 +171,6 @@ namespace Tetris
 
             if (filledRow < 0)
                 break;
-
-            std::cout << "Removing line " << filledRow << std::endl;
 
             ++linesRemoved;
 
@@ -249,8 +242,9 @@ namespace Tetris
 
         if (InvalidPointSet(points))
         {
-            std::cout << "Game over!" << std::endl;
             active = false;
+            if (!playerName.empty() && highScores.IsHighScore(score))
+                highScores.AddHighScore(playerName, score);
         }
         else
         {

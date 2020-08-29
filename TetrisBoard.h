@@ -1,6 +1,8 @@
 #pragma once
 
 #include "Tetromino.h"
+#include "HighScores.h"
+
 #include <memory>
 #include <vector>
 #include <chrono>
@@ -13,7 +15,7 @@ namespace Tetris
     class TetrisBoard
     {
     public:
-        TetrisBoard();
+        TetrisBoard(const std::string& playerName, const std::string& highScoreFile);
 
         void Start();
         void Tick();
@@ -32,6 +34,8 @@ namespace Tetris
         void Rotate(bool clockwise);
         bool IsActive() const { return active; }
         bool IsGameOver() const { return !active && stationaryPoints.size() > 0; }
+
+        const std::vector<HighScores::Score>& GetHighScores() const { return highScores.GetHighScores(); }
     private:
         bool IsTimeToTick();
         void MoveActiveTetramino(int deltax, int deltay);
@@ -63,6 +67,9 @@ namespace Tetris
         int score{0};
         int level{1};
         int totalLinesRemoved;
+
+        HighScores highScores;
+        std::string playerName;
     };
 
 

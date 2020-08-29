@@ -5,15 +5,20 @@
 
 #include <iostream>
 
-int main()
+int main(int argc, char *argv[])
 {
     sf::RenderWindow window(sf::VideoMode(600, 800), "Tetris");
     window.setFramerateLimit(60); // Lowers cpu usage drastically
 
-    Tetris::TetrisBoard board;
-    Tetris::TetrisBoardDrawer boardDrawer(board, window);
+    std::string playerName;
+    if (argc > 1)
+        playerName = argv[1];
 
-    
+    const char* home = getenv("HOME");
+    std::string highScoreFile = std::string(home) + std::string("/highscores.txt");
+
+    Tetris::TetrisBoard board(playerName, highScoreFile);
+    Tetris::TetrisBoardDrawer boardDrawer(board, window);
 
     while (window.isOpen())
     {

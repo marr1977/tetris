@@ -151,5 +151,54 @@ namespace Tetris
             line.setPosition(startX, startY + i * boxSize);
             window.draw(line);
         }
+
+        // Print highscores
+        size_t pos = 1;
+        float highScoreX = 40;
+        float highScoreY = startY;
+        float textHeight = 12;
+        float scoreSpacing = 20;
+        float textSpacing = 5;
+        float titleTextHeight = 16;
+        sf::Color highScoreColor(24, 220, 24);
+
+        {
+            sf::Text text;
+            text.setFont(font);
+            text.setString("Highscores");
+            text.setPosition(highScoreX, highScoreY);
+            text.setCharacterSize(titleTextHeight);
+            text.setFillColor(highScoreColor);
+            window.draw(text);
+        }
+
+        for (HighScores::Score score : board.GetHighScores())
+        {
+            float scoreY = highScoreY + titleTextHeight + scoreSpacing + 
+                (textHeight * 2 + textSpacing + scoreSpacing) * (pos - 1);
+            float nameY = scoreY + textSpacing + textHeight;
+
+            {
+                sf::Text text;
+                text.setFont(font);
+                text.setString(score.name);
+                text.setPosition(highScoreX, nameY);
+                text.setCharacterSize(textHeight);
+                text.setFillColor(highScoreColor);
+                window.draw(text);
+            }
+
+            {
+                sf::Text text;
+                text.setFont(font);
+                text.setString(std::to_string(score.score));
+                text.setPosition(highScoreX, scoreY);
+                text.setCharacterSize(textHeight);
+                text.setFillColor(highScoreColor);
+                window.draw(text);
+            }
+
+            pos++;
+        }
     }
 }
