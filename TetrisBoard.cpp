@@ -5,7 +5,7 @@ namespace Tetris
 {
 
     TetrisBoard::TetrisBoard(const std::string& _playerName, const std::string& highScoreFile) : 
-        gen(rd()), distrib(1,7), highScores("/home/martin/highscores.txt", 10), playerName(_playerName)
+        gen(rd()), distrib(1,7), highScores(highScoreFile, 10), playerName(_playerName)
     {
     }
 
