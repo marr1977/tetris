@@ -62,6 +62,41 @@ namespace Tetris
                 window.draw(text);
             }
         }
+        else
+        {
+            if (board.GetNextTetromino())
+            {
+                std::set<Point> points;
+                board.GetNextTetromino()->GetPoints(points);
+
+                float nextY = startY + (board.GetHeight() / 3) * boxSize;
+                float nextX = startX + (board.GetWidth() - 3) * boxSize + 10;
+
+                sf::Text text;
+                text.setFont(font);
+                text.setString("Next");
+                text.setCharacterSize(16);
+                text.setPosition(nextX + 110, nextY - text.getCharacterSize() - 15);
+                text.setFillColor(gridColor);
+                window.draw(text);
+
+                for (const Point& pt : points)
+                {
+                    if (pt.y < 0) {
+                        continue;
+                    }
+                    float topX = nextX + pt.x * boxSize;
+                    float topY = nextY + pt.y * boxSize;
+        
+                    sf::RectangleShape box({boxSize, boxSize});
+                    box.setFillColor(board.GetNextTetromino()->GetColor());
+                    box.setPosition(topX, topY);
+                    window.draw(box);
+                }
+
+            }
+        }
+        
 
         if (board.GetMovingTetromino())
         {

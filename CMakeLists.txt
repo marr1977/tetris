@@ -10,6 +10,8 @@ target_link_libraries(Tetris -lsfml-graphics)
 target_link_libraries(Tetris -lsfml-window)
 target_link_libraries(Tetris -lsfml-system)
 
+configure_file(arial.ttf arial.ttf COPYONLY)
+
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
 include(CPack)

@@ -19,6 +19,7 @@ namespace Tetris
         void Tick();
 
         const TetrominoPtr& GetMovingTetromino() const { return movingTetramino; }
+        const TetrominoPtr& GetNextTetromino() const { return nextTetramino; }
         const std::map<Point, sf::Color>& GetPoints() const { return stationaryPoints; }
 
         const int GetHeight() const { return height; }
@@ -41,6 +42,7 @@ namespace Tetris
         void RemoveFilledLines();
     private:
         TetrominoPtr movingTetramino;
+        TetrominoPtr nextTetramino;
         std::map<Point, sf::Color> stationaryPoints;
 
         bool active{false};
@@ -50,7 +52,7 @@ namespace Tetris
 
         std::chrono::steady_clock::time_point lastTick;
         
-        static constexpr long INITIAL_MILLISECONDS_BETWEEN_TICK{200};
+        static constexpr long INITIAL_MILLISECONDS_BETWEEN_TICK{500};
 
         long millisecondsBetweenTick;
 
@@ -59,7 +61,7 @@ namespace Tetris
         std::uniform_int_distribution<> distrib;
 
         int score{0};
-        int level{0};
+        int level{1};
         int totalLinesRemoved;
     };
 

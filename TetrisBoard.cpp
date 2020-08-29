@@ -20,9 +20,10 @@ namespace Tetris
         lastTick = std::chrono::steady_clock::now();
         active = true;
         score = 0;
-        level = 0;
+        level = 1;
         totalLinesRemoved = 0;
         stationaryPoints.clear();
+        std::cout << "Start" << std::endl;
     }
 
     void TetrisBoard::Tick()
@@ -204,13 +205,13 @@ namespace Tetris
         }
 
         if (linesRemoved == 1)
-            score += 40 * (level + 1);
+            score += 40 * level;
         else if (linesRemoved == 2)
-            score += 100 * (level + 1);
+            score += 100 * level;
         else if (linesRemoved == 3)
-            score += 300 * (level + 1);
+            score += 300 * level;
         else if (linesRemoved == 4)
-            score += 1200 * (level + 1);
+            score += 1200 * level;
 
         if (linesRemoved > 0)
         {
@@ -240,10 +241,11 @@ namespace Tetris
 
     void TetrisBoard::GenerateTetramino()
     {
-        std::unique_ptr<Tetromino> generated(GetRandomTetramino());
+        if (!nextTetramino)
+            nextTetramino = std::unique_ptr<Tetromino>(GetRandomTetramino());
 
         std::set<Point> points;
-        generated->GetPoints(points);
+        nextTetramino->GetPoints(points);
 
         if (InvalidPointSet(points))
         {
@@ -252,10 +254,11 @@ namespace Tetris
         }
         else
         {
-            movingTetramino = std::move(generated);
+            movingTetramino = std::move(nextTetramino);
         }
-        
-        
+
+        std::cout << "Generated" << std::endl;       
+        nextTetramino = std::unique_ptr<Tetromino>(GetRandomTetramino());
     }
 
 }
